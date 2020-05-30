@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <div th:replace="fragmentPlugin :: head">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+        <link rel="stylesheet" href="../static/css/Navfix.css">
+        <link rel="stylesheet" href="../static/css/typo.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"/>
+        <link rel="stylesheet" href="../static/lib/prism/prism.css">
+        <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css">
+    </div>
+
+</head>
+<body>
+<!--Navigation-->
+    <nav th:replace="fragmentPlugin :: menu(800)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+        <div class ="ui container">
+            <div class="ui inverted secondary stackable menu">
+                <h2 class="ui teal header item">Blog</h2>
+                <a href="#" class="m-item-c-o item mobile-icon-hide"><i class="home icon"></i>HomePage</a>
+                <a href="#" class="m-item-c-o item mobile-icon-hide"><i class="idea icon"></i>Category</a>
+                <a href="#" class="m-item-c-o item mobile-icon-hide"><i class="tags icon"></i>Tags</a>
+                <a href="#" class="m-item-c-o item mobile-icon-hide"><i class="clone icon"></i>Archive</a>
+                <a href="#" class="m-item-c-o item mobile-icon-hide"><i class="info icon"></i>About Me</a>
+                <!--SearchBox-->
+                <div class="right item">
+                    <div class="ui icon inverted transparent input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+            <i class="sidebar icon"></i>
+        </a>
+    </nav>
+<!--Content-->
+    <div id="waypoint" class="m-padded-tb-big m-container-small animate__animated animate__bounceInLeft">
+        <div class="ui container">
+            <!--Head-->
+            <div class="ui attached segment">
+                <div class="ui horizontal link list">
+                    <div class="item">
+                        <img src="https://picsum.photos/id/1011/100/100" th:src="@{${blog.user.avatar}}" alt="" class="ui avatar image">
+                        <div class="content">
+                            <a href="#" class="header" th:text="${blog.user.nickname}">Zilin Li</a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <i class="calendar icon"></i><span th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}"></span>
+                    </div>
+                    <div class="item">
+                        <i class="eye icon"></i> <span th:text="${blog.views}">33</span>
+                    </div>
+                </div>
+            </div>
+            <!--Image area-->
+            <div class="ui attached segment">
+                <img src="https://picsum.photos/id/1050/800/450" alt="" class="ui fluid rounded image" th:src="@{${blog.firstPicture}}">
+            </div>
+            <!--Content-->
+            <div class="ui attached padded segment">
+                <div class="ui right aligned basic segment">
+                    <div class="ui label olive"  th:text="${blog.flag}">original</div>
+                </div>
+                <h2 class="ui center aligned header" th:text="${blog.title}">Error occurred during initialization of boot layer
+                </h2>
+                <br>
+                <div id=" content" class="typo typo-selection js-toc-content m-padded-left-right m-padded-tb-large" th:utext="${blog.content}">
+                    <h3 id="para001" class="ui left aligned">This is a draft paragraph</h3>
+                    <pre><code class="language-css">button {color : yellow }</code> </pre>
+                    <p>The error occurs because of you add  your jar library files to MODULEPATH instead of CLASSPATH. You have to add jar files to your CLASSPATH. If you already  add jar files to MODLEPATH you have to remove from there and add jar files to CLASSPATH, there is the steps:</p>
+
+                    <p>1] Right click on your project name in ECLIPSE IDE </p>
+
+                    <p>2] Click on  PROPERTIES -&gt; JAVA BUILD PATH -&gt; click LIBRARY tab.:</p>
+                    <h3 id="para002" class="ui left aligned">This is a draft paragraph</h3>
+                    <p>3] After that click on CLASSPATH -&gt;and click the button 'ADDJAR' and select the jar files ,your are done. Look the picture below for clarification;</p>
+
+                    <p>5] After adding jars files in CLASSPATH it</p>
+                </div>
+                <div class="m-padded-left-right">
+                    <div class="ui teal left pointing label" th:each="tag : ${blog.tags}" th:text="${tag.name}">Problem solving</div>
+                </div>
+                <!--Donate-->
+                <div class="ui center aligned basic segment" th:if="blog.appreciation">
+                <button id="paybutton" class="ui green basic circular button">Donate</button>
+                </div>
+                <div class="ui payWe flowing popup transition hidden">
+                    <div class="ui pink basic label">
+                        <div class="ui images" style="font-size: inherit !important;">
+                            <div class="image">
+                                <img src="../static/images/WechatIMG4.jpeg" th:src="@{/images/WechatIMG4.jpeg}" alt="" class="ui rounded bordered image" style="width: 120px">
+                                <div >Wechat pay</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Blog-->
+            <div class="ui attached positive message" th:if="${blog.shareStatement}">
+                <div class="ui middle aligned grid">
+                    <div class="eleven wide column">
+                        <ui class="list">
+                            <li><span th:text="${blog.user.nickname}"></span>Author: Zilin Li(李梓霖)
+                                <a href="#" th:href="@{/about}" target="_blank">（contact me）</a>
+                            </li>
+                            <li><span th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}">last update </span></li>
+                        </ui>
+                    </div>
+                    <div class="five wide column">
+                        <img src="../static/images/cityhunterRyo.gif" th:src="@{/images/cityhunterRyo.gif}" alt="" class="ui right floated rounded bordered image" style="width:110px">
+                    </div>
+                </div>
+            </div>
+            <!--Discussion-->
+            <div class="ui bottom attached segment" th:if="${blog.commenTable}">
+                <div id="comment-container"  class="ui teal segment">
+                    <div th:fragment="commentList">
+                        <div class="ui threaded comments" style="max-width: 100%;">
+                            <h3 class="ui dividing header">Comment</h3>
+                            <div class="comment" th:each="comment : ${comments}">
+                                <a class="avatar">
+                                    <img src="https://unsplash.it/100/100?image=1005" th:src="@{${comment.avatar}}">
+                                </a>
+                                <div class="content">
+                                    <a class="author" >
+                                        <span th:text="${comment.nickname}">Matt</span>
+                                        <div class="ui mini basic teal left pointing label m-padded-mini" th:if="${comment.adminComment}">admin</div>
+                                    </a>
+                                    <div class="metadata">
+                                        <span class="date" th:text="${#dates.format(comment.createTime,'yyyy-MM-dd HH:mm')}">6:42PM</span>
+                                    </div>
+                                    <div class="text" th:text="${comment.content}">
+                                        How artistic!
+                                    </div>
+                                    <div class="actions">
+                                        <a class="reply" data-commentid="1" data-commentnickname="Matt" th:attr="data-commentid=${comment.id},data-commentnickname=${comment.nickname}" onclick="reply(this)">reply</a>
+                                    </div>
+                                </div>
+                                <div class="comments" th:if="${#arrays.length(comment.replyComments)}>0">
+                                    <div class="comment" th:each="reply : ${comment.replyComments}">
+                                        <a class="avatar">
+                                            <img src="https://unsplash.it/100/100?image=1005" th:src="@{${reply.avatar}}">
+                                        </a>
+                                        <div class="content">
+                                            <a class="author" >
+                                                <span th:text="${reply.nickname}">jerry</span>
+                                                <div class="ui mini basic teal left pointing label m-padded-mini" th:if="${reply.adminComment}">admin</div>
+                                                &nbsp;<span th:text="|@ ${reply.parentComment.nickname}|" class="m-atSymbol-blue">@ harrt</span>
+                                            </a>
+                                            <div class="metadata">
+                                                <span class="date" th:text="${#dates.format(reply.createTime,'yyyy-MM-dd HH:mm')}">Today at 11:11PM</span>
+                                            </div>
+                                            <div class="text" th:text="${reply.content}">
+                                                How artistic!
+                                            </div>
+                                            <div class="actions">
+                                                <a class="reply" data-commentid="1" data-commentnickname="Matt" th:attr="data-commentid=${reply.id},data-commentnickname=${reply.nickname}" onclick="reply(this)">reply</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="ui form">
+                    <input type="hidden" name="blog.id" th:value="${blog.id}">
+                    <input type="hidden" name="parentComment.id" value="-1">
+                    <div class="field">
+                        <textarea name="content" placeholder="please leave your comments" ></textarea>
+                    </div>
+                    <div class="fields">
+                        <div class="field m-mobile-wide m-margin-bottom-small">
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" name="nickname" placeholder="name" th:value="${session.user}!=null? ${session.user.nickname}">
+                            </div>
+                        </div>
+                        <div class="field m-mobile-wide m-margin-bottom-small">
+                            <div class="ui left icon input">
+                                <i class="mail icon"></i>
+                                <input type="text" name="email" placeholder="email" th:value="${session.user}!=null? ${session.user.email}">
+                            </div>
+                        </div>
+                        <div class="field m-mobile-wide m-margin-bottom-small">
+                               <button id="commentpost-btn"  type="button" class="ui teal button"><i class="edit icon"></i>submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="toolbar" class="m-fixed m-absolutePosition-BotRight m-padded-large">
+        <div class="ui vertical icon buttons">
+            <button class="ui yellow toc-contain-donate button" type="button">directory</button>
+            <a href="#comment-container" class="ui pink button">comment</a>
+            <button class="ui wechatMe icon blue button"><i class="qq icon"></i></button>
+            <div id="down-to-top" class="ui icon grey button"><i class="chevron up icon"></i></div>>
+        </div>
+    </div>
+    <div class="ui toc-container flowing popup transition hidden" style="width: 260px">
+        <ol class="js-toc"></ol>
+    </div>
+
+    <div id="wechat-qr" class="ui wechatQR flowing popup transition hidden m-padded-mini" style="width: 100px !important;">
+<!--        <img src="./static/images/wechat001.jpeg" class="ui rounded image" style="width: 100px !important;">-->
+    </div>
+
+
+<br>
+<br>
+<!--footer-->
+    <footer th:replace="fragmentPlugin :: foot" class="ui inverted vertical segment m-padded-tb-small">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item m-margin-top-reg">
+                        <img src="../static/images/WechatIMG6.jpeg"  class=" ui rounded image" alt="" style="width: 110px">
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <br>
+                <h4 class="ui inverted header">Recent Blogs</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">User Story</a>
+                </div>
+            </div>
+            <div class="three wide column">
+                <br>
+                <h4 class="ui inverted header">Contct Me</h4>
+                <div class="ui inverted link list">
+                    <p class="m-opacity-min">lzlazmmaster@gmail.com</p>
+                    <p class="m-opacity-min">zli22@wpi.edu</p>
+                    <p class="m-opacity-min">Github:</p>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <br>
+                <h4 class="ui inverted header">About this Blog</h4>
+                <div class="ui inverted link list">
+                    <p class="m-opacity-min">Built by Semantic UI, Springboot and Mysql</p>
+                </div>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-spaced m-opacity-small">Copyright © Zilin Li</p>
+    </div>
+</footer>
+
+<!--<th:block th:replace="fragmentPlugin :: myscript">-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="../static/lib/prism/prism.js" th:src="@{/lib/prism/prism.js}"></script>
+<script src="../static/lib/tocbot/tocbot.min.js" th:src="@{/lib/tocbot/tocbot.min.js}"></script>
+<script src="../static/lib/qrcode/qrcode.min.js" th:src="@{/lib/qrcode/qrcode.min.js}"></script>
+<script src="../static/lib/scrollTo/jquery.scrollTo.min.js" th:src="@{/lib/scrollTo/jquery.scrollTo.min.js}"></script>
+<script src="../static/lib/waypoints/jquery.waypoints.min.js" th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
+<!--</th:block>-->
+
+<!------tocbot.init({}) is used to initialize directory------->
+<script th:inline="javascript">
+    tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.js-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.js-toc-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+
+    var serurl = "127.0.0.1:8080";
+    var url = /*[[@{/blog/{id}(id=${blog.id})}]]*/"";
+    var qrcode = new QRCode("wechat-qr", {
+        text: serurl+url,
+        width: 110,
+        height: 110,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+
+    $('.menu.toggle').click(function () {
+        $('.m-item-c-o').toggleClass('mobile-icon-hide');
+    });
+    $('#paybutton').popup({
+        popup:$('.payWe.popup'),
+        on:'click',
+        position:'bottom center'
+    });
+
+    $('.wechatMe').popup({
+        popup:$('.wechatQR.popup'),
+        position:'left center'
+    });
+
+    $('.toc-contain-donate.button').popup({
+        popup:$('.toc-container.popup'),
+        on:'click',
+        position:'left center'
+    });
+    $('#down-to-top').click(function () {
+        $(window).scrollTo(0,400)
+    });
+    var waypoint = new Waypoint({
+        element: document.getElementById('waypoint'),
+        handler: function(direction) {
+            if(direction=='down'){
+               $('#toolbar').show(400);
+            }
+            else{
+                $('#toolbar').hide(400);
+            }
+            console.log('Scrolled to waypoint!')
+        }
+    });
+
+    $('.ui.form').form({
+
+
+            fields: {
+                title: {
+                    identifier: 'content',
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'please leave a comment'
+                    }
+                    ]
+                },
+                content: {
+                    identifier: 'nickname',
+                    rules: [{
+                        type: 'empty',
+                        prompt: 'must have a nick name'
+                    }]
+                },
+                type: {
+                    identifier: 'email',
+                    rules: [{
+                        type: 'email',
+                        prompt: 'should have correct email format'
+                    }]
+                }
+            }
+
+    });
+    $(function () {
+        $("#comment-container").load(/*[[@{/comments/{id}(id=${blog.id})}]]*/"comments/8");
+    });
+
+    $('#commentpost-btn').click(function () {
+        var boo = $('.ui.form').form('validate form');
+        if (boo) {
+            console.log('validate success');
+            postData();
+        } else {
+            console.log("validate success");
+        }
+
+    });
+
+    function postData() {
+        $("#comment-container").load(/*[[@{/comments}]]*/"",{
+            "parentComment.id" : $("[name='parentComment.id']").val(),
+            "blog.id" : $("[name='blog.id']").val(),
+            "nickname": $("[name='nickname']").val(),
+            "email"   : $("[name='email']").val(),
+            "content" : $("[name='content']").val()
+        },function (responseTxt, statusTxt, xhr) {
+      $(window).scrollTo($('#comment-container'),500);
+            clearContent();
+        });
+    }
+
+    function clearContent() {
+        $("[name='content']").val('');
+        $("[name='parentComment.id']").val(-1);
+        $("[name='content']").attr("placeholder", "please leave a comment...");
+    }
+
+    function reply(obj) {
+        var commentId = $(obj).data('commentid');
+        var commentNickname = $(obj).data('commentnickname');
+        $("[name='content']").attr("placeholder", "@"+commentNickname).focus();
+        $("[name='parentComment.id']").val(commentId);
+        $(window).scrollTo($('#comment-form'),550);
+    }
+
+
+</script>
+</body>
+</html>

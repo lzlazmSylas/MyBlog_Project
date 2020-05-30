@@ -1,0 +1,6 @@
+2020-05-17 18:55:45.456  INFO 1629 --- [restartedMain] com.lzl.MyblogApplication                : Starting MyblogApplication on zilindeMacBook-Pro.local with PID 1629 (/Users/azm/IdeaProjects/myblog/target/classes started by azm in /Users/azm/IdeaProjects/myblog)
+2020-05-17 18:55:45.458  INFO 1629 --- [restartedMain] com.lzl.MyblogApplication                : No active profile set, falling back to default profiles: default
+2020-05-17 18:55:47.037  WARN 1629 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2020-05-17 18:55:47.215  WARN 1629 --- [restartedMain] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2020-05-17 18:55:47.337  INFO 1629 --- [restartedMain] com.lzl.MyblogApplication                : Started MyblogApplication in 2.195 seconds (JVM running for 2.749)
+2020-05-17 19:05:59.054  WARN 1629 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=7m42s72ms).

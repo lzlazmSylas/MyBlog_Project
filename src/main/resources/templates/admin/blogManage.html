@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlogEdit</title>
+    <div th:replace="admin/fragmentPlugin :: head">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+        <link rel="stylesheet" href="../../static/css/Navfix.css">
+    </div>
+</head>
+<body>
+<!--Navigation-->
+    <nav  th:replace="admin/fragmentPlugin :: menu(0)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+        <div class ="ui container">
+            <div class="ui inverted secondary stackable menu">
+                <h2 class="ui teal header item">Blog Management</h2>
+                <a href="#" class="m-item-c-o item mobile-icon-hide"><i class="home icon"></i>Blogs</a>
+                <a href="#" class="m-item-c-o item mobile-icon-hide"><i class="idea icon"></i>Category</a>
+                <a href="#" class="m-item-c-o item mobile-icon-hide"><i class="tags icon"></i>Tags</a>
+                <div class="right menu">
+                    <div class="ui dropdown item">
+                        <div class="text">
+                            <img src="https://picsum.photos/id/237/100/100" alt="" class="ui avatar image">
+                            Zilin
+                        </div>
+                        <i class="ui dropdown icon"></i>
+                        <div class="menu">
+                            <a href="#" class="item">log out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+            <i class="sidebar icon"></i>
+        </a>
+    </nav>
+    <div class="ui attached teal pointing menu">
+        <div class="ui container">
+            <div class="right menu">
+                <a href="#" th:href="@{/admin/blogManage/input}" class="item">post</a>
+                <a href="#" th:href="@{/admin/blogManage}"  class="active olive item">list</a>
+            </div>
+        </div>
+    </div>
+<!--Content-->
+    <div class="m-padded-tb-big m-container-small">
+        <div class="ui container">
+            <div   class="ui secondary segment form">
+                <input type="hidden" name="page">
+                <div class="inline fields">
+                    <div class="field">
+                        <input type="text" name="title" placeholder="title">
+                    </div>
+                   <div class="field">
+                       <div class="labeled action input">
+                           <div class="ui type selection dropdown">
+                               <input type="hidden" name="typeId">
+                               <i class="dropdown icon"></i>
+                               <div class="default text">category</div>
+                               <div class="menu">
+                                   <div th:each="type: ${type}"  th:data-value="${type.id}" th:text="${type.name}" class="item"  data-value="1">problem solving</div>
+                               </div>
+                           </div>
+                           <button id="clear-btn" class="ui compact button">clear</button>
+                       </div>
+
+                   </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input type="checkbox" id="recommend" name="recommend">
+                            <label for="recommend" class="m-text-fontOne">recommend</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <button type="button" id="search-btn" class="ui teal basic mini button"><i class="search icon"></i> search</button>
+                    </div>
+                </div>
+            </div>
+            <div id="table-container">
+                <table th:fragment="blogList" class="ui compact teal table">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>title</th>
+                        <th>category</th>
+                        <th>recommend</th>
+                        <th>state</th>
+                        <th>last updated</th>
+                        <th>operation</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="blog,iterStat : ${page.content}">
+                        <td th:text="${iterStat.count}">1</td>
+                        <td th:text="${blog.title}"></td>
+                        <td th:text="${blog.type.name}"></td>
+                        <td th:text="${blog.recommend} ? 'yes':'no'">yes</td>
+                        <td th:text="${blog.published} ? 'post':'draft'"></td>
+                        <td th:text="${blog.updateTime}">2020-1-02 09:45</td>
+                        <td>
+                            <a href="#" th:href="@{/admin/blogManage/{id}/input(id=${blog.id})}" class="ui mini teal basic button">edit</a>
+                            <a href="#" th:href="@{/admin/blogManage/{id}/delete(id=${blog.id})}" class="ui mini red basic button">delete</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th colspan="7">
+                            <div class="ui mini pagination menu" th:if="${page.totalPages}>1" >
+                                <a onclick="page(this)" th:attr="data-page=${page.number}-1" class="item" th:unless="${page.first}">last pate</a>
+                                <a onclick="page(this)" th:attr="data-page=${page.number}+1" class=" item" th:unless="${page.last}">next page</a>
+                            </div>
+                            <a href="#" th:href="@{/admin/blogManage/input}" class="ui mini right floated teal basic button">create</a>
+                        </th>
+                    </tr>
+                    </tfoot>
+                </table>
+
+                <div class="ui success message" th:unless="${#strings.isEmpty(message)}"  >
+                    <i class="close icon"></i>
+                    <div class="header">提示：</div>
+                    <p th:text="${message}">恭喜，操作成功！</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+<br>
+<br>
+<!--footer-->
+    <footer th:replace="admin/fragmentPlugin :: foot" class="ui inverted vertical segment m-padded-tb-massive">
+        <div class="ui center aligned container">
+            <div class="ui inverted divided stackable grid">
+                <div class="three wide column">
+                    <div class="ui inverted link list">
+                        <div class="item">
+                        <img src="../../static/images/wechat001.jpeg" class=" ui rounded image" alt="" style="width: 110px">
+                    </div>
+                        </div>
+                </div>
+                <div class="three wide column">
+                    <h4 class="ui inverted header">Recent Blogs</h4>
+                    <div class="ui inverted link list">
+                        <a href="#" class="item">User Story</a>
+                    </div>
+                </div>
+                <div class="three wide column">
+                    <h4 class="ui inverted header">Contct Me</h4>
+                    <div class="ui inverted link list">
+                        <p class="m-opacity-min">lzlazmmaster@gmail.com</p>
+                        <p class="m-opacity-min">zli22@wpi.edu</p>
+                        <p class="m-opacity-min">Github:</p>
+                    </div>
+                </div>
+                <div class="seven wide column">
+                    <h4 class="ui inverted header">About this Blog</h4>
+                    <div class="ui inverted link list">
+                        <p class="m-opacity-min">Built by Semantic UI, Springboot and Mysql</p>
+                    </div>
+                </div>
+            </div>
+            <div class="ui inverted section divider"></div>
+            <p class="m-text-spaced m-opacity-small">Copyright © Zilin Li</p>
+        </div>
+    </footer>
+<!--<th:block th:replace="fragmentPlugin :: myscript">-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<!--</th:block>-->
+<script>
+    $('.menu.toggle').click(function () {
+        $('.m-item-c-o').toggleClass('mobile-icon-hide');
+    });
+    $('.ui.dropdown').dropdown({
+        on:'hover'
+    });
+
+    $('#clear-btn')
+        .on('click', function() {
+            $('.ui.type.dropdown')
+                .dropdown('clear')
+            ;
+        })
+    ;
+
+    $('.message .close')
+        .on('click', function () {
+            $(this)
+                .closest('.message')
+                .transition('fade');
+        });
+
+
+    /****设置查询页数，上一页下一页****/
+    $("#search-btn").click(function () {
+        $("[name='page']").val(0);
+        loaddata();
+    });
+
+    function page(obj) {
+        $("[name='page']").val($(obj).data("page"));
+        loaddata();
+    }
+
+
+
+    function loaddata() {
+        $("#table-container").load(/*[[@{/admin/blogManage/search}]]*/"/admin/blogManage/search", {
+            title: $("[name='title']").val(),
+            typeId: $("[name='typeId']").val(),
+            recommend: $("[name='recommend']").prop('checked'),
+            page: $("[name='page']").val()
+        });
+    }
+</script>
+</body>
+</html>

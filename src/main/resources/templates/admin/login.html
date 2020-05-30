@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage</title>
+    <div th:replace="admin/fragmentPlugin :: head">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+        <link rel="stylesheet" href="../../static/css/Navfix.css">
+    </div>
+</head>
+<body>
+<br>
+<br>
+<br>
+    <div class="m-container-small">
+        <div class="ui container m-padded-tb-large" style="max-width: 30em !important;">
+            <div class="ui middle aligned center aligned grid">
+                <div class="column">
+                    <h2 class="ui teal image header">
+                        <div class="content">
+                            Backend Management System
+                        </div>
+                    </h2>
+                    <form class="ui large form" method="post" action="#" th:action="@{/admin/login}" >
+                        <div class="ui segment">
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="user icon"></i>
+                                    <input type="text" name="username" placeholder="username">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="lock icon"></i>
+                                    <input type="password" name="password" placeholder="Password">
+                                </div>
+                            </div>
+                            <button class="ui fluid large teal submit button">Login</button>
+                        </div>
+
+                        <div class="ui error message"></div>
+                            <div class="ui mini negative message" th:unless="${#strings.isEmpty(message)}" th:text="${message}" >
+                                username or password error
+                            </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+<!--<th:block th:replace="fragmentPlugin :: myscript">-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<!--</th:block>-->
+<script>
+    $('.menu.toggle').click(function () {
+        $('.m-item-c-o').toggleClass('mobile-icon-hide');
+    });
+    $('.ui.form').form({
+        fields : {
+            username:{
+                identifier:'username',
+                rules:[{
+                    type:'empty',
+                    prompt:'username cannot be empty'
+                }]
+            },
+            password:{
+                identifier:'password',
+                rules:[{
+                    type:'empty',
+                    prompt:'password cannot be empty'
+                }]
+            }
+        }
+    });
+</script>
+</body>
+</html>

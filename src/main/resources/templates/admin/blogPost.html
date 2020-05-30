@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlogPost</title>
+        <div th:replace="admin/fragmentPlugin :: head">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+            <link rel="stylesheet" href="../../static/css/Navfix.css">
+            <link rel="stylesheet" href="../../static/lib/editormd/css/editormd.min.css">
+        </div>
+
+</head>
+<body>
+<!--Navigation-->
+    <nav th:replace="admin/fragmentPlugin :: menu(0)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+        <div class ="ui container">
+            <div class="ui inverted secondary stackable menu">
+                <h2 class="ui teal header item">Blog Editing</h2>
+                <a href="#" class="m-item-c-o item mobile-icon-hide"><i class="home icon"></i>Blogs</a>
+                <a href="#" class="m-item-c-o item mobile-icon-hide"><i class="idea icon"></i>Category</a>
+                <a href="#" class="m-item-c-o item mobile-icon-hide"><i class="tags icon"></i>Tags</a>
+                <div class="right menu">
+                    <div class="ui dropdown item">
+                        <div class="text">
+                            <img src="https://picsum.photos/id/237/100/100" alt="" class="ui avatar image">
+                            Zilin
+                        </div>
+                        <i class="ui dropdown icon"></i>
+                        <div class="menu">
+                            <a href="#" class="item">log out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+            <i class="sidebar icon"></i>
+        </a>
+    </nav>
+    <div class="ui attached teal pointing menu">
+        <div class="ui container">
+            <div class="right menu">
+                <a href="#" th:href="@{/admin/blogManage/input}"  class="active olive item">post</a>
+                <a href="#" th:href="@{/admin/blogManage}" class="item">list</a>
+            </div>
+        </div>
+    </div>
+<!--Content-->
+<div  class="m-padded-tb-big">
+    <div class="ui container">
+        <form id="blog-form" action="#" th:object="${blog}" th:action="@{/admin/blogManage/post}" method="get" class="ui form">
+            <input type="hidden" name="published" th:value="*{published}">
+            <input type="hidden" name="id" th:value="*{id}">
+            <div class="required field">
+                <div class="ui left labeled input">
+                    <div class="ui selection compact teal basic dropdown label">
+                        <input type="hidden" value="none" name="flag" th:value="*{flag}" >
+                        <i class="dropdown icon"></i>
+                        <div class="text">None!</div>
+                        <div class="menu">
+                            <div class="item" data-value="original" >original</div>
+                            <div class="item" data-value="forward">foward</div>
+
+                        </div>
+                    </div>
+                    <input type="text" name="title" placeholder="title" th:value="*{title}">
+                </div>
+            </div>
+
+            <div class="required field">
+                <div id="md-content" style="z-index: 1 !important;">
+                    <textarea placeholder="content" name="content" style="display: none" th:text="*{content}"></textarea>
+                </div>
+            </div>
+
+            <div class="two fields">
+                <div class="required field">
+                    <div class="ui left labeled action input">
+                        <label class="ui compact teal basic label">category</label>
+                        <div class="ui fluid selection dropdown">
+                            <input type="hidden" name="type.id" th:value="*{type}!=null ? *{type.id}">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">category</div>
+                            <div class="menu">
+                                <div th:each="type : ${types}" class="item" data-value="1" th:data-value="${type.id}" th:text="${type.name}">错误日志</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class=" field">
+                    <div class="ui left labeled action input">
+                        <label class="ui compact teal basic label">tag</label>
+                        <div class="ui fluid selection multiple search  dropdown">
+                            <input type="hidden" name="tagIds" th:value="*{tagIds}" >
+                            <!---get tag object by tagService.listTag(blog.getTagId()), blog.getid() return String variable/--->
+                            <i class="dropdown icon"></i>
+                            <div class="default text">tag</div>
+                            <div class="menu">
+                                <div th:each="tag : ${tags}" class="item" data-value="1" th:data-value="${tag.id}" th:text="${tag.name}">java</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="required field">
+                <div class="ui left labeled input">
+                    <label class="ui teal basic label">Head Picture</label>
+                    <input type="text" name="firstPicture" th:value="*{firstPicture}" placeholder="head picture url">
+                </div>
+            </div>
+
+            <div class="required field">
+                <textarea name="description" th:text="*{description}" placeholder="description" maxlength="200" ></textarea>
+            </div>
+
+            <div class="inline fields">
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="recommend" name="recommend" checked  th:checked="*{recommend}" class="hidden">
+                        <label for="recommend">recommend</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="shareStatement" name="shareStatement" th:checked="*{shareStatement}"  class="hidden">
+                        <label for="shareStatement">forward</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="appreciation" name="appreciation"  th:checked="*{appreciation}"  class="hidden">
+                        <label for="appreciation">donate</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="commenTable" name="commenTable" th:checked="*{commenTable}"  class="hidden">
+                        <label for="commenTable">comment</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui error message"></div>
+
+            <div class="ui right aligned container">
+                <button type="button" class="ui button" onclick="window.history.go(-1)" >back</button>
+                <button type="button" id="save-btn" class="ui secondary button">save</button>
+                <button type="button" id="publish-btn" class="ui teal button">submit</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+<!--footer-->
+    <footer th:replace="admin/fragmentPlugin :: foot" class="ui inverted vertical segment m-padded-tb-massive">
+        <div class="ui center aligned container">
+            <div class="ui inverted divided stackable grid">
+                <div class="three wide column">
+                    <div class="ui inverted link list">
+                        <div class="item">
+                        <img src="../../static/images/wechat001.jpeg" class=" ui rounded image" alt="" style="width: 110px">
+                    </div>
+                        </div>
+                </div>
+                <div class="three wide column">
+                    <h4 class="ui inverted header">Recent Blogs</h4>
+                    <div class="ui inverted link list">
+                        <a href="#" class="item">User Story</a>
+                    </div>
+                </div>
+                <div class="three wide column">
+                    <h4 class="ui inverted header">Contct Me</h4>
+                    <div class="ui inverted link list">
+                        <p class="m-opacity-min">lzlazmmaster@gmail.com</p>
+                        <p class="m-opacity-min">zli22@wpi.edu</p>
+                        <p class="m-opacity-min">Github:</p>
+                    </div>
+                </div>
+                <div class="seven wide column">
+                    <h4 class="ui inverted header">About this Blog</h4>
+                    <div class="ui inverted link list">
+                        <p class="m-opacity-min">Built by Semantic UI, Springboot and Mysql</p>
+                    </div>
+                </div>
+            </div>
+            <div class="ui inverted section divider"></div>
+            <p class="m-text-spaced m-opacity-small">Copyright © Zilin Li</p>
+        </div>
+    </footer>
+<th:block th:replace="admin/fragmentPlugin :: myscript">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script src="../../static/lib/editormd/editormd.min.js" th:src="@{/lib/editormd/editormd.min.js}"></script>
+</th:block>
+
+<script>
+    var testEditor;
+
+    $(function() {
+        testEditor = editormd("md-content", {
+            width   : "100%",
+            height  : 640,
+            syncScrolling : "single",
+            path    : "/lib/editormd/lib/"
+        });
+
+    });
+
+
+    $('#save-btn').click(function () {
+        $('[name="published"]').val(false);
+        $('#blog-form').submit();
+    });
+
+
+    $('#publish-btn').click(function () {
+        $('[name="published"]').val(true);
+        $('#blog-form').submit();
+    });
+
+    $('.menu.toggle').click(function () {
+        $('.m-item-c-o').toggleClass('mobile-icon-hide');
+    });
+    $('.ui.dropdown').dropdown();
+
+
+
+    $('.ui.form').form({
+        fields : {
+            title: {
+                identifier: 'title',
+                rules: [{
+                    type: 'empty',
+                    prompt: 'please enter a blog title'
+                }]
+
+            },
+            content: {
+                identifier: 'content',
+                rules: [{
+                    type: 'empty',
+                    prompt: 'please input the content'
+                }]
+            },
+            typeId: {
+                identifier: 'type.id',
+                rules: [{
+                    type: 'empty',
+                    prompt: 'please input a type'
+                }]
+            },
+            description: {
+                identifier: 'description',
+                rules: [{
+                    type: 'empty',
+                    prompt: 'must have a description'
+                }]
+            },
+            firstPicture: {
+                identifier: 'firstPicture',
+                rules: [{
+                    type: 'empty',
+                    prompt: 'please insert a picture'
+                }]
+            }
+        }
+    });
+</script>
+</body>
+</html>
